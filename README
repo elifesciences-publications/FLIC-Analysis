@@ -25,3 +25,5 @@ tailored statistical tests suitable for your experiments and data.
 
 4. Last but not least, all parameters are tunable! 
 You can go to makePlotsAndTables.R to change the parameters of the analysis so that they are in line with your experiments and data. 
+
+To start using the code, go to run.R and follow the instructions! 
