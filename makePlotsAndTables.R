@@ -19,6 +19,8 @@
 # to be in order for us to consider it a separate feeding event
 # 2. peakTolerance (default = 70)
 # this is a parameter for the pracma findpeaks function's minpeakDistance parameter
+# basically, if you lower this parameter, you should get more sensitivity to peaks and thus more peaks
+# might be detected, and vice versa. 
 # 3. min.peak.height (default = 20)
 # this is a parameter for the pracma findpeaks function's minpeakDistance parameter
 # 4. baseline.offset.for.contact.threshold (default = 20)
@@ -28,10 +30,10 @@
 # Usually, depending on the experimenter, it takes several minutes to load the flies into the FLIC wells. 
 # By setting the default begin.time as 1500 (5 minutes), we allow 5 minutes for the experimenter to load in the flies 
 # before we actually analyze the data. 
-# 6. end.time (default = 6000) 
+# 6. end.time (default = end of data recorded, i.e. nrow(df) ) 
 # this is a parameter for determining when to stop the analysis. Depending on your experiment, 
 # you might want to analyze the first 15 minutes of data or you might want to to analyze the full length of the 
-# data you collected. The default is 18000. 
+# data you collected. The default is nrow(df), i.e. the full length of the data. 
 # Remember, the time unit here is in samples. We used a default sampling rate of 5 samples/sec,
 # hence 1500/5 = 300 seconds = 5 minutes and 18000/5 = 3600 = 60 minutes 
 
@@ -53,7 +55,7 @@ makePlotsAndTables<-function(df,filename) {
   # other tunable parameters as explained above are here
   
   begin.time = 1500
-  end.time = 18000
+  end.time = nrow(df)
   timeTolerance = 5
   peakTolerance = 70
   min.peak.height = 20
@@ -80,7 +82,10 @@ makePlotsAndTables<-function(df,filename) {
     
     # +4 due to the df having time, samples and other columns (totalling 4 columns) before the 12 actual data columns
     datum<-df[begin.time:end.time,i+4]
-    
+    if(sum(is.na(datum)) > 0) {
+      print('You have missing data values in your FLIC experiment...if you have time, you might want to consider rerunning the experiment.')
+      datum[is.na(datum)] <- 1
+      }
     # set threshold for sip/contact/licks
     data.baseline <- find.mode(datum)
     contactThreshold <- data.baseline + baseline.offset.for.contact.threshold
