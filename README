@@ -1,3 +1,5 @@
+This code is associated with the paper "A receptor and neuron that activate a circuit limiting sucrose consumption". eLife, 2017. http://dx.doi.org/10.7554/eLife.24992
+
 README
 It takes around 1-2 minutes for code to analyze a 3 hour dataset, 
 takes around 30 seconds for code to analyze 1 hour dataset.
